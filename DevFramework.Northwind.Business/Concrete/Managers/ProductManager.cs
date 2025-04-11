@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using FluentValidation;
 using System.Transactions;
 using DevFramework.Core.Aspects.Postsharp.ValidationAspects.ValidationAspects;
+using DevFramework.Core.CrossCuttingConcerns.Caching.Microsoft;
 
 
 namespace DevFramework.Northwind.Business.Concrete.Managers
@@ -25,15 +26,17 @@ namespace DevFramework.Northwind.Business.Concrete.Managers
                _productDal = productDal;
         }
         [FluentValidationAspect(typeof(ProductValidatior))]
+        [CacheRemoveAspect(typeof(MemoryCacheManager))]
         public Product Add(Product product)
         {
 
             return _productDal.Add(product);
         }
-
+        [CacheAspect(typeof(MemoryCacheManager))]
         public List<Product> GetAll()
         {
             return _productDal.GetList();
+
         }
 
         public Product GetById(int id)
@@ -44,7 +47,6 @@ namespace DevFramework.Northwind.Business.Concrete.Managers
         [TransactionScopeAspect]
         public void TransactionalOperation(Product product1, Product product2)
         {
-
             _productDal.Add(product1);
             _productDal.Update(product2);
         }
