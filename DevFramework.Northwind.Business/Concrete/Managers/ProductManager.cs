@@ -10,6 +10,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using FluentValidation;
+using System.Transactions;
+using DevFramework.Core.Aspects.Postsharp.ValidationAspects.ValidationAspects;
 
 
 namespace DevFramework.Northwind.Business.Concrete.Managers
@@ -37,6 +39,14 @@ namespace DevFramework.Northwind.Business.Concrete.Managers
         public Product GetById(int id)
         {
             return _productDal.Get(p=>p.ProductId == id);
+        }
+
+        [TransactionScopeAspect]
+        public void TransactionalOperation(Product product1, Product product2)
+        {
+
+            _productDal.Add(product1);
+            _productDal.Update(product2);
         }
 
         public Product Update(Product product)
