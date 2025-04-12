@@ -10,7 +10,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using FluentValidation;
-using System.Transactions;
 using DevFramework.Core.Aspects.Postsharp.ValidationAspects.ValidationAspects;
 using DevFramework.Core.CrossCuttingConcerns.Caching.Microsoft;
 using DevFramework.Core.CrossCuttingConcerns.Logging.Log4Net.Loggers;
@@ -22,6 +21,7 @@ namespace DevFramework.Northwind.Business.Concrete.Managers
     public class ProductManager : IProductService
     {
         private IProductDal _productDal;
+
 
         public ProductManager(IProductDal productDal)
         {
@@ -35,8 +35,6 @@ namespace DevFramework.Northwind.Business.Concrete.Managers
             return _productDal.Add(product);
         }
         [CacheAspect(typeof(MemoryCacheManager))]
-        [LogAspect(typeof(DatabaseLogger))]
-        [LogAspect(typeof(FileLogger))]
         public List<Product> GetAll()
         {
             return _productDal.GetList();
