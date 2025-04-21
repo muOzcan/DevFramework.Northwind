@@ -31,7 +31,6 @@ namespace DevFramework.Core.Aspects.Postsharp.AuthorizationAspects
             }
 
 
-            base.OnEntry(args);
         }
     }
 }
