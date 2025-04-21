@@ -31,6 +31,7 @@ namespace DevFramework.Core.CrossCuttingConcerns.Security.Web
             stringBuilder.Append("|");
             stringBuilder.Append(firstName); stringBuilder.Append("|");
             stringBuilder.Append(lastName); stringBuilder.Append("|");
+            stringBuilder.Append(id.ToString());
             return stringBuilder.ToString();
         }
     }

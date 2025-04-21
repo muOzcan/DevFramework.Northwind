@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Security;
 
 namespace DevFramework.Core.CrossCuttingConcerns.Security.Web
@@ -51,10 +52,12 @@ namespace DevFramework.Core.CrossCuttingConcerns.Security.Web
 
         private string[] SetRoles(FormsAuthenticationTicket ticket)
         {
+
             string[] data = ticket.UserData.Split('|');
             string[] roles = data[1].Split(new char[] {','},StringSplitOptions.RemoveEmptyEntries);
             return roles;
         }
+    
 
         private string SetEmail(FormsAuthenticationTicket ticket)
         {
