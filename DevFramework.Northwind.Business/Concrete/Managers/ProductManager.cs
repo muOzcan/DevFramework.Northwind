@@ -39,10 +39,18 @@ namespace DevFramework.Northwind.Business.Concrete.Managers
             return _productDal.Add(product);
         }
         [CacheAspect(typeof(MemoryCacheManager))]
-        [SecuredOperation(Roles ="Admin,Editor")]
+        //[SecuredOperation(Roles ="Admin,Editor")]
         public List<Product> GetAll()
         {          
-            return _productDal.GetList();
+            return _productDal.GetList().Select(p=>new Product 
+            {
+                CategoryId = p.CategoryId,
+                ProductId = p.ProductId,
+                ProductName = p.ProductName,
+                QuantityPerUnit = p.QuantityPerUnit,
+                UnitPrice = p.UnitPrice
+
+            }).ToList();
 
         }
 
