@@ -18,6 +18,8 @@ using DevFramework.Core.Aspects.Postsharp.PerformanceAspects;
 using System.Threading;
 using System.Security.Permissions;
 using DevFramework.Core.Aspects.Postsharp.AuthorizationAspects;
+using AutoMapper;
+using DevFramework.Core.Utilities.Mappings;
 
 
 namespace DevFramework.Northwind.Business.Concrete.Managers
@@ -25,11 +27,12 @@ namespace DevFramework.Northwind.Business.Concrete.Managers
     public class ProductManager : IProductService
     {
         private IProductDal _productDal;
+        private readonly IMapper _mapper;
 
-
-        public ProductManager(IProductDal productDal)
+        public ProductManager(IProductDal productDal, IMapper mapper)
         {
-               _productDal = productDal;
+            _productDal = productDal;
+            _mapper = mapper;
         }
         [FluentValidationAspect(typeof(ProductValidatior))]
         [CacheRemoveAspect(typeof(MemoryCacheManager))]
@@ -41,22 +44,16 @@ namespace DevFramework.Northwind.Business.Concrete.Managers
         [CacheAspect(typeof(MemoryCacheManager))]
         //[SecuredOperation(Roles ="Admin,Editor")]
         public List<Product> GetAll()
-        {          
-            return _productDal.GetList().Select(p=>new Product 
-            {
-                CategoryId = p.CategoryId,
-                ProductId = p.ProductId,
-                ProductName = p.ProductName,
-                QuantityPerUnit = p.QuantityPerUnit,
-                UnitPrice = p.UnitPrice
+        {
 
-            }).ToList();
-
+            var products = _mapper.Map<List<Product>>(_productDal.GetList());
+            return products;
         }
+
 
         public Product GetById(int id)
         {
-            return _productDal.Get(p=>p.ProductId == id);
+            return _productDal.Get(p => p.ProductId == id);
         }
 
         [TransactionScopeAspect]
